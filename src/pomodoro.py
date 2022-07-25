@@ -4,10 +4,13 @@ import sys
 import os
 from flask import Flask, render_template, url_for, request, redirect
 import sqlite3
+import tkinter as tk 
 
 from src.logger import Log, console
 
 console.rule("Primazon")
+
+window = tk.Tk(screenName="Pomodoro")
 
 DATABASE_SQLLITE = "pomodoro.db"
 
