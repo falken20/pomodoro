@@ -47,3 +47,8 @@ if __name__ == "__main__":
     Log.info("Starting pomodoro app")
 
     window = tk.Tk(screenName="Pomodoro")
+
+    greeting = tk.Label(text="TKinter label")
+    greeting.pack()
+
+    window.mainloop()
