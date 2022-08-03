@@ -2,7 +2,6 @@
 
 import sys
 import os
-from flask import Flask, render_template, url_for, request, redirect
 import sqlite3
 import tkinter as tk 
 

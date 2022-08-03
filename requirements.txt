@@ -1,7 +1,5 @@
 rich>=11.2.0
 python-dotenv>=0.19.2
-Flask>=2.0.3
 psycopg2>=2.9.3
 gunicorn==20.0.4 # For Heroku
-flask-sqlalchemy
 # python3-tk # If you haven’t installed Python with the official installers
