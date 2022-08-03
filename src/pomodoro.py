@@ -12,11 +12,6 @@ console.rule("Primazon")
 
 DATABASE_SQLLITE = "pomodoro.db"
 
-app = Flask(__name__, template_folder='../docs/templates',
-            static_folder='../docs/static')
-# Set this var to True to be able to make any web change and take the changes with refresh
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-
 # Set the database params for SQLAlchemy ORM library. This is due to a change in the sqlalchemy
 # library. It was an announced deprecation in the changing of name postgres to postgresql.
 # In Heroku you cant change the value of this environment var to postgresql
@@ -24,19 +19,8 @@ db = os.getenv('DATABASE_URL', None)
 if db is None:
     db = sqlite3.connect(DATABASE_SQLLITE)
 else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = db.replace("://", "ql://", 1)
+    pass
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-# Secret key for creating session coockie. It has to be different for each user
-app.secret_key = os.urandom(24)
-
-# db.init_app(app)
-
-
-@app.route('/')
-@app.route('/home')
-@app.route('/<message>')
-@app.route('/home/<message>')
 def index(message=""):
     Log.info("Method to show index page...")
 
@@ -49,6 +33,6 @@ if __name__ == "__main__":
     window = tk.Tk(screenName="Pomodoro")
 
     greeting = tk.Label(text="TKinter label")
-    greeting.pack()
+    greeting.pack() # Add widget to window
 
-    window.mainloop()
+    window.mainloop() # Runs the Tkinter events loop
