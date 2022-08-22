@@ -10,26 +10,32 @@
 </div>
 
 
-
-App for helping to apply the pomodoro technic.
 ---
+App for helping to apply the pomodoro technic.
+
 
 ##### Setup
 
 ```bash
-pipenv install
+pip install -r requirements.txt
 ```
 
 ##### Running the app
 
 ```bash
-python ./src/primazon.py
+python ./src/pomodoro.py
+```
+
+##### Script check project
+
+```bash
+./scripts/check_project.sh
 ```
 
 ##### Setup tests
 
 ```bash
-pipenv install --dev
+pip install -r requirements-test.txt
 ```
 
 ##### Running the tests with pytest and coverage

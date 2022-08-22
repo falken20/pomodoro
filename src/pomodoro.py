@@ -33,47 +33,57 @@ def index(message=""):
 
 def create_widget_time(window):
     """ Create the time panel in the left side of the screen """
-    frame_time = ttk.Frame(master=window, relief=tk.RIDGE,
-                           borderwidth=BORDER_WIDTH)
-    frame_time.pack(side=tk.LEFT)
+    frm_time = ttk.Frame(master=window, relief=tk.RIDGE,
+                         borderwidth=BORDER_WIDTH)
+    frm_time.pack(side=tk.LEFT, fill=tk.BOTH)
 
-    label_time = ttk.Label(master=frame_time, text="00:00")
-    label_time.pack(side=tk.TOP)
+    lbl_time = ttk.Label(master=frm_time, text="00:00")
+    lbl_time.pack(side=tk.TOP)
 
-    button_config = ttk.Button(master=frame_time, text="Config")
-    button_config.pack(side=tk.BOTTOM)
+    btn_config = ttk.Button(master=frm_time, text="Config")
+    btn_config.pack(side=tk.BOTTOM)
 
-    button_focus = ttk.Button(master=frame_time, text="Start Focus")
-    button_focus.pack(side=tk.BOTTOM)
+    btn_focus = ttk.Button(master=frm_time, text="Start Focus")
+    btn_focus.pack(side=tk.BOTTOM)
 
 
 def create_widget_panel(window):
     """ Create the result panel in the right side of the screen """
-    frame_panel = ttk.Frame(master=window, relief=tk.RIDGE,
-                            borderwidth=BORDER_WIDTH)
-    frame_panel.pack(side=tk.RIGHT)
+    frm_panel = ttk.Frame(master=window, relief=tk.RIDGE,
+                          borderwidth=BORDER_WIDTH)
+    frm_panel.pack(side=tk.RIGHT, fill=tk.BOTH)
 
-    label_pomodoro = ttk.Label(master=frame_panel, text="Count Pomodoro")
-    label_pomodoro.pack(side=tk.TOP)
-    label_count_pomodoro = ttk.Label(master=frame_panel, text="0")
-    label_count_pomodoro.pack()
+    lbl_pomodoro = ttk.Label(master=frm_panel, text="Count Pomodoro")
+    lbl_pomodoro.pack(side=tk.TOP)
+    lbl_count_pomodoro = ttk.Label(master=frm_panel, text="0")
+    lbl_count_pomodoro.pack()
 
-    label_cycles = ttk.Label(master=frame_panel, text="Count Cycles")
-    label_cycles.pack(side=tk.TOP)
-    label_count_cycles = ttk.Label(master=frame_panel, text="0")
-    label_count_cycles.pack()
+    lbl_cycles = ttk.Label(master=frm_panel, text="Count Cycles")
+    lbl_cycles.pack(side=tk.TOP)
+    lbl_count_cycles = ttk.Label(master=frm_panel, text="0")
+    lbl_count_cycles.pack()
 
-    label_total = ttk.Label(master=frame_panel, text="Total Cycles")
-    label_total.pack(side=tk.TOP)
-    label_total_cycles = ttk.Label(master=frame_panel, text="0")
-    label_total_cycles.pack()
+    lbl_total = ttk.Label(master=frm_panel, text="Total Cycles")
+    lbl_total.pack(side=tk.TOP)
+    lbl_total_cycles = ttk.Label(master=frm_panel, text="0")
+    lbl_total_cycles.pack()
+
+
+def set_styles():
+    s = ttk.Style()
+    # Create style used by default for all Frames
+    s.configure('TFrame', background='green')
 
 
 if __name__ == "__main__":
     Log.info("Starting pomodoro app")
 
     window_pomodoro = tk.Tk(screenName="Pomodoro")
+    window_pomodoro.title("Pomodoro")
+    window_pomodoro.config(bg='red')
+    window_pomodoro.geometry('300x200')
 
+    set_styles()
     create_widget_time(window=window_pomodoro)
     create_widget_panel(window=window_pomodoro)
 
