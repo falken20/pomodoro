@@ -45,10 +45,12 @@ def create_frame_time(window):
     lbl_time.pack(side=tk.TOP)
     lbl_time.config(font=(FONT_TYPE, 60))
 
-    btn_config = ttk.Button(master=frm_time, text="Config")
+    btn_config = ttk.Button(
+        master=frm_time, text="Config", command=handle_btn_config)
     btn_config.pack(side=tk.BOTTOM)
 
-    btn_focus = ttk.Button(master=frm_time, text="Start Focus")
+    btn_focus = ttk.Button(
+        master=frm_time, text="Start Focus", command=handle_btn_focus)
     btn_focus.pack(side=tk.BOTTOM)
 
 
@@ -85,6 +87,18 @@ def set_styles():
     s.configure("FramePanel.TFrame", background="yellow")
 
 
+def handle_keypress(event):
+    Log.info(f"Key pressed: {event.char}")
+
+
+def handle_btn_focus(event):
+    Log.info(f"Button Focus pressed")
+
+
+def handle_btn_config(event):
+    Log.info(f"Button Config pressed")
+
+
 if __name__ == "__main__":
     Log.info("Starting pomodoro app")
 
@@ -97,4 +111,6 @@ if __name__ == "__main__":
     create_frame_time(window=window_pomodoro)
     create_frame_panel(window=window_pomodoro)
 
+    # Bind keypress event to handle_keypress()
+    window_pomodoro.bind("<Key>", handle_keypress)
     window_pomodoro.mainloop()  # Runs the Tkinter events loop
