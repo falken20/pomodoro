@@ -8,6 +8,11 @@ FONT_TYPE = "Helvatical bold"
 # TKinter main window
 window_pomodoro = tk.Tk(screenName="Pomodoro")
 
+# TKinter top frame
+frm_logo = ttk.Frame(master=window_pomodoro, relief=tk.RIDGE,
+                     borderwidth=BORDER_WIDTH)
+photo = tk.PhotoImage(file='./docs/static/img/logo_app.png')
+lbl_logo = ttk.Label(master=frm_logo, image=photo)
 
 # TKinter components left side
 frm_time = ttk.Frame(master=window_pomodoro, relief=tk.RIDGE,
