@@ -113,11 +113,22 @@ def update_summary(cursor=cursor) -> None:
 
 def main():
     try:
-        if input("Could you drop the tables if they exist (y/n)? ") in ["Y", "y"]:
-            drop_tables(cursor)
+        option = None
+        while option != "0":
+            print("     1. Drop tables")
+            print("     2. Create summary table")
+            print("     3. Init summary table")
+            print("     0. Exit")
+            option = input("Choose the option:")
 
-        create_table_summary(cursor)
-        init_table_summary(cursor)
+            if option == "1":
+                drop_tables(cursor)
+            elif option == "2":
+                create_table_summary(cursor)
+            elif option == "3":
+                init_table_summary(cursor)
+            elif option != "0":
+                print("Sorry, incorrect option")
 
     except Exception as err:
         Log.error("Error in config DB", err, sys)
