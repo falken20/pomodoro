@@ -1,11 +1,11 @@
-from distutils.command.config import config
+import sys
 import tkinter as tk
 from tkinter import font
 from tkinter.font import BOLD
 import tkinter.ttk as ttk
 from turtle import bgcolor
 
-from click import style
+from logger import Log
 
 BORDER_WIDTH = 5  # Border width of the frames
 FONT_TYPE = "Arial"
@@ -28,7 +28,8 @@ frm_time = ttk.Frame(master=window_pomodoro, relief=tk.RIDGE,
                      borderwidth=BORDER_WIDTH,
                      style="FrameTime.TFrame")
 lbl_time = ttk.Label(master=frm_time, text="00:00")
-btn_focus = ttk.Button(master=frm_time, text="Start Focus", style="Button.TButton")
+btn_focus = ttk.Button(
+    master=frm_time, text="Start Focus", style="Button.TButton")
 btn_pause = ttk.Button(master=frm_time, text="Pause", style="Button.TButton")
 btn_config = ttk.Button(master=frm_time, text="Config", style="Button.TButton")
 
@@ -93,10 +94,11 @@ def set_styles():
     style.configure("FramePanel.TFrame", background="yellow")
 
     style.map('Button.TButton',
-        foreground = [('pressed','red'),('active','blue')],
-        background = [('pressed','!disabled','black'),('active','white')],
-        relief=[('pressed', 'sunken'),('!pressed', 'raised')]
-    )
+              foreground=[('pressed', 'red'), ('active', 'blue')],
+              background=[('pressed', '!disabled', 'black'),
+                          ('active', 'white')],
+              relief=[('pressed', 'sunken'), ('!pressed', 'raised')]
+              )
 
     # Individual styles
     lbl_time.config(font=(FONT_TYPE, 80, BOLD))
@@ -115,3 +117,13 @@ def set_window():
     # Set the column weight
     window_pomodoro.columnconfigure(0, weight=2)
     window_pomodoro.columnconfigure(1, weight=1)
+
+
+def update_panels(pomodoro_count: int, cycles_count: int, total_cycles_count: int) -> None:
+    """ Update labels summary with info from DB """
+    try:
+        lbl_count_pomodoro.config(text=pomodoro_count)
+        lbl_count_cycles.config(text=cycles_count)
+        lbl_total_cycles.config(text=total_cycles_count)
+    except Exception as err:
+        Log.error("Error in config DB", err, sys)
