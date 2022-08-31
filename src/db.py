@@ -5,7 +5,6 @@ import os
 from dotenv import load_dotenv, find_dotenv
 
 from logger import Log, console
-from components import update_panels
 
 # Load env file
 load_dotenv(find_dotenv())
@@ -22,6 +21,8 @@ def drop_tables(cursor: sqlite3.Cursor) -> None:
         Log.info("Deleting SUMMARY table...")
         cursor.execute("DROP TABLE IF EXISTS summary")
 
+        conn.commit()
+
     except Exception as err:
         Log.error("Error deleting tables", err, sys)
 
@@ -37,6 +38,9 @@ def create_table_summary(cursor: sqlite3.Cursor) -> None:
                 );"""
 
         cursor.execute(sql)
+
+        conn.commit()
+
     except Exception as err:
         Log.error("Error creating SUMMARY table", err, sys)
 
@@ -49,10 +53,13 @@ def init_table_summary(cursor: sqlite3.Cursor = cursor) -> None:
 
         cursor.execute(sql)
 
+        conn.commit()
+
         Log.info(f"Initialized table succesfully... {get_summary(cursor)}")
 
     except Exception as err:
-        Log.error(f"Error initialazing SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
+        Log.error(
+            f"Error initialazing SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
 
 
 def get_summary(cursor=cursor) -> list:
@@ -68,7 +75,8 @@ def get_summary(cursor=cursor) -> list:
         return cursor.fetchone()
 
     except Exception as err:
-        Log.error(f"Error initialazing SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
+        Log.error(
+            f"Error initialazing SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
 
 
 def update_summary(cursor=cursor) -> None:
@@ -79,7 +87,7 @@ def update_summary(cursor=cursor) -> None:
         summary = get_summary(cursor)
         Log.info(f"Getting summary data to update: {summary}")
 
-        pomodoro_count = summary[1]+ 1
+        pomodoro_count = summary[1] + 1
         cycles_count = summary[2]
         total_cycles_count = summary[3]
 
@@ -96,10 +104,11 @@ def update_summary(cursor=cursor) -> None:
 
         cursor.execute(sql)
 
-        update_panels(pomodoro_count, cycles_count, total_cycles_count)
+        conn.commit()
 
     except Exception as err:
-        Log.error(f"Error updating SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
+        Log.error(
+            f"Error updating SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
 
 
 def main():
@@ -109,8 +118,6 @@ def main():
 
         create_table_summary(cursor)
         init_table_summary(cursor)
-
-        update_summary()
 
     except Exception as err:
         Log.error("Error in config DB", err, sys)

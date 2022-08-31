@@ -7,7 +7,7 @@ from click import command  # Include Themed widgets
 
 from logger import Log, console
 from components import *
-from db import update_summary, get_summary
+from db import update_summary, get_summary, cursor
 
 console.rule("Pomodoro")
 
@@ -33,17 +33,16 @@ def handle_btn_focus():
     try:
         Log.info(f"Button FOCUS pressed")
 
-        lbl_time.config(text="15:00")
+        seconds = 3
+
+        lbl_time.config(text=f"{seconds // 60:02d}:{seconds % 60:02d}")
         window_pomodoro.update()
 
-        seconds = 3
         while seconds > 0:
             time.sleep(1)
             seconds -= 1
             lbl_time.config(text=f"{seconds // 60:02d}:{seconds % 60:02d}")
             window_pomodoro.update()
-
-            Log.info(f"{seconds=}")
 
         # Play sound in Mac with native player
         os.system("afplay " + SOUND_FILE)
@@ -52,11 +51,12 @@ def handle_btn_focus():
 
         update_summary()
         data = get_summary()
-        update_panels(data[1], data[2], data[3])
+        update_panels(
+            pomodoro_count=data[1], cycles_count=data[2], total_cycles_count=data[3])
         Log.info("Data and panels succesfully updated")
-    
+
     except Exception as err:
-        Log.error("Error in Focus button", err, sys)        
+        Log.error("Error in Focus button", err, sys)
 
 
 def handle_btn_pause():
