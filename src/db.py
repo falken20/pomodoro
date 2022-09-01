@@ -1,8 +1,8 @@
-from mimetypes import init
 import sqlite3
 import sys
 import os
 from dotenv import load_dotenv, find_dotenv
+from datetime import date, datetime
 
 from logger import Log, console
 
@@ -23,6 +23,8 @@ def drop_tables(cursor: sqlite3.Cursor) -> None:
 
         conn.commit()
 
+        Log.info("Tables succesfully deleted")
+
     except Exception as err:
         Log.error("Error deleting tables", err, sys)
 
@@ -34,12 +36,15 @@ def create_table_summary(cursor: sqlite3.Cursor) -> None:
                     user VARCHAR(40),
                     pomodoro_count INT,
                     cycles_count INT,
-                    total_cycles_count INT
+                    total_cycles_count INT,
+                    date_update timestamp
                 );"""
 
         cursor.execute(sql)
 
         conn.commit()
+
+        Log.info("SUMMARY table succesfully created")
 
     except Exception as err:
         Log.error("Error creating SUMMARY table", err, sys)
@@ -47,19 +52,24 @@ def create_table_summary(cursor: sqlite3.Cursor) -> None:
 
 def init_table_summary(cursor: sqlite3.Cursor = cursor) -> None:
     try:
-        Log.info("Initialazing SUMMARY table...")
-        sql = f"""INSERT INTO summary (user, pomodoro_count, cycles_count, total_cycles_count)
-                    VALUES ("{USER_APP}", 0, 0, 0);"""
+        Log.info("Dropping and Initializing SUMMARY table...")
 
+        sql = f"DELETE FROM summary WHERE user = '{USER_APP}'"
         cursor.execute(sql)
+
+        sql = f"""INSERT INTO summary (user, pomodoro_count, cycles_count, total_cycles_count, date_update)
+                    VALUES (?, ?, ?, ?, ?);"""
+
+        data = (USER_APP, 0, 0, 0, date.today())
+        cursor.execute(sql, data)
 
         conn.commit()
 
-        Log.info(f"Initialized table succesfully... {get_summary(cursor)}")
+        Log.info(f"Table initialized succesfully... {get_summary(cursor)}")
 
     except Exception as err:
         Log.error(
-            f"Error initialazing SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
+            f"Error initializing SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
 
 
 def get_summary(cursor=cursor) -> list:
@@ -76,7 +86,7 @@ def get_summary(cursor=cursor) -> list:
 
     except Exception as err:
         Log.error(
-            f"Error initialazing SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
+            f"Error initializing SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
 
 
 def update_summary(cursor=cursor) -> None:
@@ -111,6 +121,35 @@ def update_summary(cursor=cursor) -> None:
             f"Error updating SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
 
 
+def init_cycles_count(cursor=cursor):
+    """ Update cycles count the first time in the day"""
+    try:
+        Log.info("Checking if date_update is today date")
+        date_update = get_summary()[4]
+        date_update = datetime.strptime(date_update, "%Y-%m-%d").date()
+
+        if date_update < date.today():
+            sql = f"""UPDATE summary SET cycles_count = 0, date_update = ?
+                        WHERE user = ?"""
+            cursor.execute(sql, (date.today(), USER_APP))
+            conn.commit()
+            Log.info("Cycles count initialized")
+
+    except Exception as err:
+        Log.error(
+            f"Error updating SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
+
+
+def exec_sql(cursor, sql) -> list:
+    try:
+        Log.info(f"Executing the sentence:\n{sql=}")
+        return cursor.execute(sql)
+
+    except Exception as err:
+        Log.error(
+            f"Error updating SUMMARY table:\n{sql if 'sql' in locals() else ''}", err, sys)
+
+
 def main():
     try:
         option = None
@@ -118,8 +157,9 @@ def main():
             print("     1. Drop tables")
             print("     2. Create summary table")
             print("     3. Init summary table")
+            print("     9. Run SQL sentence")
             print("     0. Exit")
-            option = input("Choose the option:")
+            option = input("Choose the option: ")
 
             if option == "1":
                 drop_tables(cursor)
@@ -127,6 +167,11 @@ def main():
                 create_table_summary(cursor)
             elif option == "3":
                 init_table_summary(cursor)
+            elif option == "9":
+                sql = input("Write SQL: ")
+                data = exec_sql(cursor, sql)
+                for row in data:
+                    print(row)
             elif option != "0":
                 print("Sorry, incorrect option")
 

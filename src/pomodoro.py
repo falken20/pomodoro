@@ -7,7 +7,7 @@ from click import command  # Include Themed widgets
 
 from logger import Log, console
 from components import *
-from db import update_summary, get_summary, cursor
+from db import update_summary, get_summary, cursor, init_cycles_count
 
 console.rule("Pomodoro")
 
@@ -67,6 +67,14 @@ def handle_btn_config():
     Log.info(f"Button CONFIG pressed")
 
 
+def set_panel_values():
+    Log.info("Setting values for panel info")
+    init_cycles_count()
+    data = get_summary()
+    update_panels(
+        pomodoro_count=data[1], cycles_count=data[2], total_cycles_count=data[3])
+
+
 if __name__ == "__main__":
     Log.info("Starting pomodoro app")
 
@@ -76,6 +84,7 @@ if __name__ == "__main__":
     set_frame_time()
     set_frame_panel()
     set_handlers()
+    set_panel_values()
 
     # Bind keypress event to handle_keypress()
     window_pomodoro.bind("<Key>", handle_keypress)
