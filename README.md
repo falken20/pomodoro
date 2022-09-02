@@ -51,5 +51,4 @@ coverage run -m pytest -v && coverage html --omit=*/venv/*,*/tests/*
 
 ##### Versions
 
-1.2.0 New Log model integrated
-1.1.0 Adaptations to ORM SQLAlchemy
+1.0.0 First version

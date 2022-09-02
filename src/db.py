@@ -129,11 +129,11 @@ def init_cycles_count(cursor=cursor):
         date_update = datetime.strptime(date_update, "%Y-%m-%d").date()
 
         if date_update < date.today():
+            Log.info("Cycles count initializing...")
             sql = f"""UPDATE summary SET cycles_count = 0, date_update = ?
                         WHERE user = ?"""
             cursor.execute(sql, (date.today(), USER_APP))
             conn.commit()
-            Log.info("Cycles count initialized")
 
     except Exception as err:
         Log.error(
@@ -143,7 +143,10 @@ def init_cycles_count(cursor=cursor):
 def exec_sql(cursor, sql) -> list:
     try:
         Log.info(f"Executing the sentence:\n{sql=}")
-        return cursor.execute(sql)
+        data = cursor.execute(sql)
+        conn.commit()
+
+        return data
 
     except Exception as err:
         Log.error(

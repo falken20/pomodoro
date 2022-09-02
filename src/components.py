@@ -30,7 +30,7 @@ frm_time = ttk.Frame(master=window_pomodoro, relief=tk.RIDGE,
 lbl_time = ttk.Label(master=frm_time, text="00:00")
 btn_focus = ttk.Button(
     master=frm_time, text="Start Focus", style="Button.TButton")
-btn_pause = ttk.Button(master=frm_time, text="Pause", style="Button.TButton")
+btn_cancel = ttk.Button(master=frm_time, text="Cancel", style="Button.TButton")
 btn_config = ttk.Button(master=frm_time, text="Config", style="Button.TButton")
 
 
@@ -63,7 +63,7 @@ def set_frame_time():
     lbl_time.grid(column=0, row=0, padx=1, pady=1, columnspan=2)
 
     btn_focus.grid(column=0, row=1, sticky=tk.NS, **PADDINGS)
-    btn_pause.grid(column=1, row=1, sticky=tk.NS, **PADDINGS)
+    btn_cancel.grid(column=1, row=1, sticky=tk.NS, **PADDINGS)
     btn_config.grid(column=0, row=2, sticky=tk.NS, **PADDINGS, columnspan=2)
 
 
@@ -85,13 +85,13 @@ def set_frame_panel():
 def set_styles():
     style = ttk.Style()
     # Create generic styles
-    style.configure('TFrame', background='green')
+    style.configure('TFrame', background='red')
     style.configure('TLabel', font=(FONT_TYPE, FONT_SIZE))
     style.configure('TButton', font=(FONT_TYPE, FONT_SIZE))
 
     # Setting a specific style
     style.configure("FrameTime.TFrame", background="red")
-    style.configure("FramePanel.TFrame", background="yellow")
+    style.configure("FramePanel.TFrame", background="black")
 
     style.map('Button.TButton',
               foreground=[('pressed', 'red'), ('active', 'blue')],
