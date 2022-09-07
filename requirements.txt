@@ -2,4 +2,4 @@ rich>=11.2.0
 python-dotenv>=0.19.2
 psycopg2>=2.9.3
 # python3-tk # If you haven’t installed Python with the official installers
-pyinstaller # To generate executable file
+# pyinstaller # To generate executable file
